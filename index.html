@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NWACP Portfolio</title>
+  <meta name="description" content="Portfolio of NWACP — Frontend Developer" />
+  <meta name="author" content="NWACP" />
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* CSS Variables for Black & White theme */
+    :root {
+      --black: #000000;
+      --dark: #0A0A0A;
+      --darker: #050505;
+      --dark-gray: #1A1A1A;
+      --medium-gray: #2A2A2A;
+      --light-gray: #3A3A3A;
+      --white: #FFFFFF;
+      --off-white: #F5F5F5;
+      --accent: #E0E0E0;
+      --text-muted: #888888;
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--darker), var(--dark));
+      color: var(--off-white);
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Pattern */
+    .bg-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.04) 0%, transparent 50%);
+      z-index: -1;
+    }
+
+    /* Background Elements */
+    .bg-element {
+      position: fixed;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--medium-gray), transparent);
+      z-index: -1;
+      animation: float 20s infinite ease-in-out;
+      opacity: 0.3;
+    }
+
+    .element-1 {
+      width: 400px;
+      height: 400px;
+      top: 10%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+
+    .element-2 {
+      width: 300px;
+      height: 300px;
+      top: 60%;
+      right: 10%;
+      animation-delay: 7s;
+    }
+
+    .element-3 {
+      width: 250px;
+      height: 250px;
+      bottom: 10%;
+      left: 20%;
+      animation-delay: 14s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+      25% { transform: translateY(-30px) translateX(15px) scale(1.05); }
+      50% { transform: translateY(20px) translateX(-15px) scale(0.95); }
+      75% { transform: translateY(-15px) translateX(-10px) scale(1.02); }
+    }
+
+    /* Loading state */
+    .loading {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .loaded {
+      opacity: 1;
+    }
+
+    /* Minimal Floating Header */
+    header {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: var(--dark-gray);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 50px;
+      padding: 8px 12px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: auto;
+      min-width: 280px;
+    }
+
+    nav {
+      display: flex;
+      gap: 5px;
+    }
+
+    /* Soft UI Navigation Buttons */
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.8rem;
+      padding: 6px 16px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      background: linear-gradient(145deg, var(--dark-gray), var(--black));
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 
+        4px 4px 8px rgba(0, 0, 0, 0.4),
+        -4px -4px 8px rgba(255, 255, 255, 0.05);
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: slideDown 0.6s forwards 0.8s;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    nav a:nth-child(1) { animation-delay: 0.8s; }
+    nav a:nth-child(2) { animation-delay: 0.9s; }
+    nav a:nth-child(3) { animation-delay: 1.0s; }
+    nav a:nth-child(4) { animation-delay: 1.1s; }
+
+    nav a:hover {
+      color: var(--white);
+      box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.4),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.08);
+      transform: translateY(0);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    nav a.active {
+      color: var(--white);
+      background: linear-gradient(145deg, var(--light-gray), var(--medium-gray));
+      box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.4),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    nav i {
+      font-size: 0.9rem;
+    }
+
+    /* Main Content */
+    main, section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem 1.5rem;
+    }
+
+    /* Hero Section */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding-top: 1rem;
+    }
+
+    .hero-content {
+      max-width: 700px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 0.8rem;
+      background: linear-gradient(135deg, var(--white), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s forwards 0.5s;
+      text-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .tagline {
+      font-size: 1.3rem;
+      margin-bottom: 1.2rem;
+      color: var(--accent);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s forwards 0.8s;
+    }
+
+    .intro {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      color: var(--text-muted);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s forwards 1.1s;
+    }
+
+    /* Soft UI CTA Button */
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.7rem 1.8rem;
+      background: linear-gradient(145deg, var(--dark-gray), var(--black));
+      color: var(--off-white);
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s forwards 1.4s;
+      border: none;
+      cursor: pointer;
+      box-shadow: 
+        6px 6px 12px rgba(0, 0, 0, 0.4),
+        -6px -6px 12px rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cta-button:hover {
+      color: var(--white);
+      box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.4),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.08);
+      transform: translateY(0);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Section Styles */
+    section {
+      margin-bottom: 3rem;
+      padding: 2.5rem 1.5rem;
+      background: linear-gradient(145deg, var(--dark-gray), var(--black));
+      border-radius: 20px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        8px 8px 16px rgba(0, 0, 0, 0.4),
+        -8px -8px 16px rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--white));
+      transform: scaleX(0);
+      transition: transform 0.5s ease;
+    }
+
+    section.visible::before {
+      transform: scaleX(1);
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+      position: relative;
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(-30px);
+      animation: slideInRight 0.8s forwards 0.3s;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--white);
+      border-radius: 2px;
+    }
+
+    /* About Section */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .about-text p {
+      margin-bottom: 1.2rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      opacity: 0;
+      transform: translateX(-30px);
+      animation: slideInRight 0.8s forwards 0.5s;
+    }
+
+    .about-text p:nth-child(2) {
+      animation-delay: 0.7s;
+    }
+
+    .about-details ul {
+      list-style: none;
+    }
+
+    .about-details li {
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      padding: 0.7rem 1rem;
+      background: linear-gradient(145deg, var(--medium-gray), var(--dark-gray));
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.3),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.05);
+      opacity: 0;
+      transform: translateX(30px);
+      animation: slideInLeft 0.8s forwards 0.5s;
+    }
+
+    .about-details li:nth-child(1) { animation-delay: 0.5s; }
+    .about-details li:nth-child(2) { animation-delay: 0.7s; }
+    .about-details li:nth-child(3) { animation-delay: 0.9s; }
+
+    .about-details li::before {
+      content: '▸';
+      color: var(--white);
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    /* Skills Section */
+    .skills-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .skill-card {
+      background: linear-gradient(145deg, var(--medium-gray), var(--dark-gray));
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        6px 6px 12px rgba(0, 0, 0, 0.4),
+        -6px -6px 12px rgba(255, 255, 255, 0.05);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 0.8s forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .skill-card:hover::before {
+      left: 100%;
+    }
+
+    .skill-card:nth-child(1) { animation-delay: 0.3s; }
+    .skill-card:nth-child(2) { animation-delay: 0.5s; }
+    .skill-card:nth-child(3) { animation-delay: 0.7s; }
+    .skill-card:nth-child(4) { animation-delay: 0.9s; }
+
+    .skill-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        8px 8px 16px rgba(0, 0, 0, 0.5),
+        -8px -8px 16px rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .skill-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(145deg, var(--light-gray), var(--medium-gray));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.2rem;
+      color: var(--white);
+      box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.4),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.1);
+    }
+
+    .skill-card h3 {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .skill-card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Contact Section */
+    #contact-form {
+      display: grid;
+      gap: 1.2rem;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s forwards;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.3s; }
+    .form-group:nth-child(2) { animation-delay: 0.5s; }
+    .form-group:nth-child(3) { animation-delay: 0.7s; }
+
+    label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--off-white);
+      font-size: 0.9rem;
+    }
+
+    input, textarea {
+      padding: 0.9rem;
+      background: linear-gradient(145deg, var(--medium-gray), var(--dark-gray));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--off-white);
+      font-family: inherit;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.3),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.05);
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.4),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.1),
+        0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Soft UI Submit Button */
+    button[type="submit"] {
+      padding: 0.9rem;
+      background: linear-gradient(145deg, var(--medium-gray), var(--dark-gray));
+      color: var(--off-white);
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      box-shadow: 
+        6px 6px 12px rgba(0, 0, 0, 0.4),
+        -6px -6px 12px rgba(255, 255, 255, 0.05);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s forwards 0.9s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    button[type="submit"]:hover {
+      color: var(--white);
+      box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.4),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .contact-other {
+      margin-top: 1.5rem;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.8s forwards 1.1s;
+    }
+
+    .contact-other p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-other a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      background: linear-gradient(145deg, var(--dark-gray), var(--black));
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      box-shadow: 
+        0 -4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .tagline {
+        font-size: 1.1rem;
+      }
+      
+      nav {
+        gap: 3px;
+      }
+      
+      nav a {
+        font-size: 0.75rem;
+        padding: 5px 12px;
+      }
+      
+      header {
+        min-width: 260px;
+        top: 15px;
+        padding: 6px 10px;
+      }
+      
+      .about-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .skills-container {
+        grid-template-columns: 1fr;
+      }
+      
+      main, section {
+        padding: 4rem 1rem 1rem;
+      }
+      
+      section {
+        padding: 2rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="loading">
+  <!-- Background Elements -->
+  <div class="bg-pattern"></div>
+  <div class="bg-element element-1"></div>
+  <div class="bg-element element-2"></div>
+  <div class="bg-element element-3"></div>
+
+  <!-- Minimal Floating Header -->
+  <header id="site-header">
+    <nav aria-label="Main navigation">
+      <a href="#home" class="active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="#about">
+        <i class="fas fa-user"></i>
+        <span>About</span>
+      </a>
+      <a href="#skills">
+        <i class="fas fa-code"></i>
+        <span>Skills</span>
+      </a>
+      <a href="#contact">
+        <i class="fas fa-envelope"></i>
+        <span>Contact</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <main id="home" role="main" aria-labelledby="home-heading">
+    <div class="hero-content">
+      <h1 id="home-heading">NWACP</h1>
+      <p class="tagline">Frontend Developer</p>
+      <p class="intro">
+        I build accessible, responsive web experiences that solve real user problems.
+      </p>
+      <a href="#contact" class="cta-button">
+        <i class="fas fa-paper-plane"></i>
+        <span>Get In Touch</span>
+      </a>
+    </div>
+  </main>
+
+  <!-- About -->
+  <section id="about" aria-labelledby="about-heading">
+    <h2 id="about-heading">About Me</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <p>
+          I'm a passionate web developer focused on creating modern, user-friendly web applications. 
+          I enjoy working on all parts of the development process and continuously learning new tools 
+          and techniques to improve my craft.
+        </p>
+        <p>
+          My approach combines technical expertise with creative problem-solving to deliver 
+          solutions that not only look great but also provide exceptional user experiences.
+        </p>
+      </div>
+      <div class="about-details">
+        <ul>
+          <li>Location: Agbor, Nigeria</li>
+          <li>Status: Available for new projects</li>
+          <li>Email: <a href="mailto:chukwuemekepraise194@gmail.com">chukwuemekepraise194@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" aria-labelledby="skills-heading">
+    <h2 id="skills-heading">Skills & Technologies</h2>
+    <div class="skills-container">
+      <div class="skill-card">
+        <div class="skill-icon">
+          <i class="fab fa-html5"></i>
+        </div>
+        <h3>HTML5</h3>
+        <p>Semantic markup, accessibility, modern HTML features</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">
+          <i class="fab fa-css3-alt"></i>
+        </div>
+        <h3>CSS3</h3>
+        <p>Responsive design, animations, Flexbox, Grid, CSS variables</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">
+          <i class="fab fa-js"></i>
+        </div>
+        <h3>JavaScript</h3>
+        <p>DOM manipulation, ES6+, modern JavaScript features</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">
+          <i class="fas fa-palette"></i>
+        </div>
+        <h3>UI/UX Design</h3>
+        <p>User-centered design, prototyping, visual design principles</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" aria-labelledby="contact-heading">
+    <h2 id="contact-heading">Contact Me</h2>
+    <p style="opacity: 0; transform: translateY(20px); animation: slideUp 0.8s forwards 0.5s;">Interested in working together? Send me a message.</p>
+
+    <form id="contact-form" action="#" method="post" novalidate>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required placeholder="Your full name" />
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="you@example.com" />
+      </div>
+      
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" required placeholder="Brief message or project details"></textarea>
+      </div>
+
+      <button type="submit">
+        <i class="fas fa-paper-plane"></i>
+        Send Message
+      </button>
+    </form>
+
+    <div class="contact-other">
+      <p>Other ways to reach me:</p>
+      <p>Email: <a href="mailto:chukwuemekepraise194@gmail.com">chukwuemekepraise194@gmail.com</a></p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <p>&copy; <span id="year">2025</span> NWACP Portfolio</p>
+    <p><a href="#home">Back to top</a></p>
+  </footer>
+
+  <script>
+    // Enhanced CSS loading with JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add loaded class to body for smooth loading
+      setTimeout(function() {
+        document.body.classList.remove('loading');
+        document.body.classList.add('loaded');
+      }, 100);
+      
+      // Set current year
+      document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // Form handling
+      const contactForm = document.getElementById('contact-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Basic validation
+          const name = document.getElementById('name').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const message = document.getElementById('message').value.trim();
+          
+          if (!name || !email || !message) {
+            alert('Please complete all fields before sending.');
+            return;
+          }
+          
+          // Simulate form submission
+          const submitBtn = contactForm.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+          submitBtn.disabled = true;
+          
+          setTimeout(function() {
+            alert('Thanks! Your message has been sent successfully.');
+            contactForm.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+          }, 1500);
+        });
+      }
+      
+      // Scroll animations
+      const sections = document.querySelectorAll('section');
+      
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+      
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+      
+      sections.forEach(section => {
+        observer.observe(section);
+      });
+      
+      // Update active nav link on scroll
+      const navLinks = document.querySelectorAll('nav a');
+      
+      function updateActiveNav() {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (scrollY >= (sectionTop - 200)) {
+            current = section.getAttribute('id');
+          }
+        });
+        
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href').substring(1) === current) {
+            link.classList.add('active');
+          }
+        });
+      }
+      
+      window.addEventListener('scroll', updateActiveNav);
+      
+      // Initialize active nav on page load
+      updateActiveNav();
+      
+      // Add smooth scroll for navigation links
+      document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
